@@ -125,8 +125,8 @@ class minHeapPrim():
 # inf to all nodes except node 0 (keyvalue = 0)
 # 2. repeat
 # 3.    find min value of node from min heap
-# 4.    check all neighbors and see if not in G yet
-# 5.    if not in G and weight > min node - itself, update
+# 4.    check all neighbors and see if not in T yet
+# 5.    if not in T and weight > min node - itself, update
 
 def Prim(Adj):
     # initialize array for prim

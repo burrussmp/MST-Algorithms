@@ -12,11 +12,12 @@ class Node:
         self.rank = 1
     def makeChildOf(self,parent):
         self.parent = parent
-    def getRoot(self):
+    def getRoot(self,path):
         if (self.parent == None): # we are root, return self
             return self
         else:
-            root = self.parent.getRoot() # climb up tree to find root node
+            path.append(self)
+            root = self.parent.getRoot(path) # climb up tree to find root node
             return root
 class UnionFind:
     # init
@@ -31,7 +32,7 @@ class UnionFind:
     # implement tree compression which doubles the time of find
     def find(self,i):
         path = []
-        root = self.trees[i].getRoot()
+        root = self.trees[i].getRoot(path)
         for nodes in path:
             nodes.parent = root
         return root
@@ -50,7 +51,7 @@ class UnionFind:
 
 # Psuedo
 # Initialize a forest of |V| trees or components
-# Repeat while components greater than 1 (logV)
+# Repeat while components greater than 1
 #   init array of components to edges of infinity to indicate cheapest edge connecting separate components called cheapEdge[] at most O(V)
 #   for each edge (u,v) in G O(E)
 #       if u and v are in different components (perform two find operations so 2log(V))

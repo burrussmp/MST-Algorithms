@@ -1,3 +1,7 @@
+# Matthew P. Burruss
+# 4/12/2019
+# CS 5250
+
 import random
 import math
 

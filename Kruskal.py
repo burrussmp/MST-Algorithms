@@ -1,5 +1,5 @@
 # Matthew P. Burruss
-# 4/11/2019
+# 4/12/2019
 # CS 5250
 
 import math
@@ -98,16 +98,16 @@ def merge(edges,low,middle,high):
 
 # takes in an adjacency list and vertices
 # Psuedo
-# Sort edges increasing: O(mlogn) 
-# Repeat until all vertices added to MST
+# Sort edges increasing: O(|E|log|E|) 
+# Look at every edge in sorted list: O(|E|)
 #   select next smallest edge O(1)
-#   see if vertex u and vertex v on different components (find(u) != find(v)): 2m times of logn
+#   see if vertex u and vertex v on different components (find(u) != find(v)): 2m times of log(|V|)
 #       combine sets: union(u,v): n-1 unions of O(1) time
 # Total running time
-# mlogn + 2mlogn + n ~= mlogn
+# ElogE + 2|E|log|V|~= ElogV
 
-# However, because tree compression was acheived, it runs in O(m*alpha(n)) where
-# alpha(n) is the inverse Ackermann function
+# However, because tree compression was acheived, it runs in O(|E|*alpha(|V|)) where
+# alpha(|V|) is the inverse Ackermann function
 def Kruskal(Adj):
     # initialize array for kruskal
     MST = Adjacency_List(Adj.getVertices(),[])
@@ -116,7 +116,7 @@ def Kruskal(Adj):
     # initialize array to keep track of what's been added
     # sort edges of input
     edges = Adj.getEdges()
-    mergeSort(edges,0,len(edges)-1) # takes mlogn
+    mergeSort(edges,0,len(edges)-1) # takes |E|log|E|
     for edge in edges:
         #edge.printMe()
         setX = UF.find(edge.u)
