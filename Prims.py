@@ -1,60 +1,11 @@
 # Matthew P. Burruss
 # 4/4/2019
 # CS 5250
+
+
+
 import math
-# adjacency list for graph
-# Adjacency list class for graphs with weighted, undirected edges
-class Adjacency_List:
-    # initialize a simple adjacency list.
-    # Requires vertices are known at init
-    def __init__(self,vertices,edges):
-        self.adj = [[] for i in range(len(vertices))]
-        self.vertices = vertices
-        self.edges = edges
-        for edge in edges:
-            self.adj[edge.u].append((edge.v,edge.weight))
-            self.adj[edge.v].append((edge.u,edge.weight))
-    # add an edge to the adjacency list
-    def addEdge(self,edge):
-        self.edges.append(edge)
-        self.adj[edge.u].append((edge.v,edge.weight))
-        self.adj[edge.v].append((edge.u,edge.weight))
-    # print adjacency list and associated edges
-    def printMe(self):
-        node = 0
-        for list in self.adj:
-            print("%d:" %node,end='')
-            node = node + 1
-            for edge in list:
-                print(" (%d:%0.2f)" % (edge[0],edge[1]),end='')
-            print('')
-    # return a specified neighbor of vertex u and that edge's weight
-    def adjacentTo(self,u,index):
-        # returns neighbor,weight
-        return self.adj[u][index][0],self.adj[u][index][1]
-    # return the number of neighbors vertex u
-    def numberOfNeighborsTo(self,u):
-        return len(self.adj[u])
-    #get number of vertices
-    def getNumberOfVertices(self):
-        return len(self.vertices)
-    # get array representation of all edges and vertices
-    def getEdges(self):
-        return self.edges
-    def getVertices(self):
-        return self.vertices
-
-# undirected weighted edge between vertex u and v with specified weight
-class Edge:
-    def __init__(self,u,v,weight):
-        self.u = u
-        self.v = v
-        self.weight = weight
-    def printMe(self):
-        print("edge:(" + str(self.u) + "--" + str(self.v) + ") with weight " + str(self.weight))
-
-
-
+from DataGenerator import Adjacency_List,Edge,DataGenerator
 # the elements of the minheap have a key-value pair
 # the elements are sorted by the value and the key corresponds to 
 # the vertex #
@@ -200,40 +151,13 @@ def Prim(Adj):
 
 
 if __name__ == '__main__':
-    """
-    #input 1
-    vertices = [0,1,2,3,4]
-    edges = []
-    edges.append(Edge(0,1,1))
-    edges.append(Edge(0,2,3))
-    edges.append(Edge(0,4,1))
-    edges.append(Edge(1,2,5))
-    edges.append(Edge(2,3,1))
-    edges.append(Edge(3,4,1))
-    edges.append(Edge(2,4,2))
-    """
-    #input 2
-    vertices = [0,1,2,3,4,5,6,7,8,9]
-    edges = []
-    edges.append(Edge(0,1,5))
-    edges.append(Edge(1,2,1))
-    edges.append(Edge(2,3,5))
-    edges.append(Edge(3,4,1))
-    edges.append(Edge(4,5,1))
-    edges.append(Edge(5,9,3))
-    edges.append(Edge(8,9,8))
-    edges.append(Edge(7,8,1))
-    edges.append(Edge(7,9,3))
-    edges.append(Edge(6,7,7))
-    edges.append(Edge(0,6,1))
-    edges.append(Edge(2,6,2))
-    edges.append(Edge(6,5,20))
-    adj = Adjacency_List(vertices,edges)
     print("##########################")
     print("Original Adjacency list")
     print("##########################")
-    adj.printMe()
-    MST = Prim(adj)
+    dg = DataGenerator(100,0.1,method = 2)
+    G = dg.generateData()
+    G.printMe()
+    MST = Prim(G)
     # print MST
     print("##########################")
     print("MST: Prim's Algorithm")

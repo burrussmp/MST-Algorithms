@@ -3,57 +3,7 @@
 # CS 5250
 
 import math
-
-# Adjacency list class for graphs with weighted, undirected edges
-class Adjacency_List:
-    # initialize a simple adjacency list.
-    # Requires vertices are known at init
-    def __init__(self,vertices,edges):
-        self.adj = [[] for i in range(len(vertices))]
-        self.vertices = vertices
-        self.edges = edges
-        for edge in edges:
-            self.adj[edge.u].append((edge.v,edge.weight))
-            self.adj[edge.v].append((edge.u,edge.weight))
-    # add an edge to the adjacency list
-    def addEdge(self,edge):
-        self.edges.append(edge)
-        self.adj[edge.u].append((edge.v,edge.weight))
-        self.adj[edge.v].append((edge.u,edge.weight))
-    # print adjacency list and associated edges
-    def printMe(self):
-        node = 0
-        for list in self.adj:
-            print("%d:" %node,end='')
-            node = node + 1
-            for edge in list:
-                print(" (%d:%0.2f)" % (edge[0],edge[1]),end='')
-            print('')
-    # return a specified neighbor of vertex u and that edge's weight
-    def adjacentTo(self,u,index):
-        # returns neighbor,weight
-        return self.adj[u][index][0],self.adj[u][index][1]
-    # return the number of neighbors vertex u
-    def numberOfNeighborsTo(self,u):
-        return len(self.adj[u])
-    #get number of vertices
-    def getNumberOfVertices(self):
-        return len(self.vertices)
-    # get array representation of all edges and vertices
-    def getEdges(self):
-        return self.edges
-    def getVertices(self):
-        return self.vertices
-
-# undirected weighted edge between vertex u and v with specified weight
-class Edge:
-    def __init__(self,u,v,weight):
-        self.u = u
-        self.v = v
-        self.weight = weight
-    def printMe(self):
-        print("edge:(" + str(self.u) + "--" + str(self.v) + ") with weight " + str(self.weight))
-    
+from DataGenerator import Adjacency_List,Edge,DataGenerator
 
 class UnionFind:
     # init
@@ -65,9 +15,13 @@ class UnionFind:
             self.trees.append(Node(i,None))
     # find() operation takes O(logn) time
     # given a node i, follow it to its root and return root
-    # implement tree compression
+    # implement tree compression which doubles the time of find
     def find(self,i):
-        return self.trees[i].getRoot()
+        path = []
+        root = self.trees[i].getRoot(path)
+        for nodes in path:
+            nodes.parent = root
+        return root
     # union() operation takes O(1) time
     # if size of setX < size of setY, make y point to x
     # keep track of rank or height
@@ -88,11 +42,12 @@ class Node:
             self.rank = 1   # if root, set level of node to 1
         else:
             self.rank = self.parent.rank + 1 # if not root, set level to parent level + 1
-    def getRoot(self):
+    def getRoot(self,path):
         if (self.parent == None): # we are root, return self
             return self
         else:
-            root = self.parent.getRoot() # climb up tree to find root node
+            path.append(self)
+            root = self.parent.getRoot(path) # climb up tree to find root node
             return root
     def printMeUpToParent(self):
         if (self.parent == None):
@@ -150,9 +105,12 @@ def merge(edges,low,middle,high):
 #       combine sets: union(u,v): n-1 unions of O(1) time
 # Total running time
 # mlogn + 2mlogn + n ~= mlogn
+
+# However, because tree compression was acheived, it runs in O(m*alpha(n)) where
+# alpha(n) is the inverse Ackermann function
 def Kruskal(Adj):
-    # initialize array for prim
-    MST = Adjacency_List(vertices,[])
+    # initialize array for kruskal
+    MST = Adjacency_List(Adj.getVertices(),[])
     # initialize union find
     UF = UnionFind(Adj.getNumberOfVertices())
     # initialize array to keep track of what's been added
@@ -169,41 +127,13 @@ def Kruskal(Adj):
 
 
 if __name__ == '__main__':
-    """
-    #input 1
-    vertices = [0,1,2,3,4]
-    edges = []
-    edges.append(Edge(0,1,1))
-    edges.append(Edge(0,2,3))
-    edges.append(Edge(0,4,1))
-    edges.append(Edge(1,2,5))
-    edges.append(Edge(2,3,1))
-    edges.append(Edge(3,4,1))
-    edges.append(Edge(2,4,2))
-    """
-    #input 2
-    vertices = [0,1,2,3,4,5,6,7,8,9]
-    edges = []
-    edges.append(Edge(0,1,5))
-    edges.append(Edge(1,2,1))
-    edges.append(Edge(2,3,5))
-    edges.append(Edge(3,4,1))
-    edges.append(Edge(4,5,1))
-    edges.append(Edge(5,9,3))
-    edges.append(Edge(8,9,8))
-    edges.append(Edge(7,8,1))
-    edges.append(Edge(7,9,3))
-    edges.append(Edge(6,7,7))
-    edges.append(Edge(0,6,1))
-    edges.append(Edge(2,6,2))
-    edges.append(Edge(6,5,20))
-    
-    adj = Adjacency_List(vertices,edges)
     print("##########################")
     print("Original Adjacency list")
     print("##########################")
-    adj.printMe()
-    MST = Kruskal(adj)
+    dg = DataGenerator(100,0.1,method = 2)
+    G = dg.generateData()
+    G.printMe()
+    MST = Kruskal(G)
     # print MST
     print("##########################")
     print("MST: Kruskal Algorithm")
