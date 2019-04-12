@@ -2,17 +2,18 @@
 Python implementation of Prim's, Kruskal's, and Sollin's algorithm
 # Analysis of Prim's Algorithm Running Time
 ## Psuedo Code
+```
 Given a graph G with vertices V and undirected, weighted edges E
 
 Create a min-heap of size |V| with key values assigned to infinity except for root assigned 0 O(|V|)
 
 Repeat:
-   <p>Select vertex u with minimum key from min heap O(1)</p>
+   Select vertex u with minimum key from min heap O(1)</p>
     
-   <p>Check neighbors of vertex u to see if not in tree</p>
+   Check neighbors of vertex u to see if not in tree</p>
     
-   <p>if neighbor not in T, update key value if key > weight(u,neighbor)</p>
-    
+   if neighbor not in T, update key value if key > weight(u,neighbor)</p>
+```
 ## Big-O Notation
 Prim's algorithm was coded using a binary heap. The algorithm selects the smallest node based on key values which represent the edges connecting the MST to the graph G so long as there are vertices remaining to be added to the MST. It then looks at its neighbors which requires |E| looks for each vertex. The heapify() function and decreaseKeyFunction run in log(|V|) and are required to maintain the heap. Therefore, the outer-loop requires adding each vertex |V| and looking at each vertex neighbor |E| and performing log(V) operations. Therefore, the total run-time is O(|V+E|log(V)). If E > V, then this simplifies to O(ELogV).
 # Analysis of Kruskal's Algorithm Running Time
